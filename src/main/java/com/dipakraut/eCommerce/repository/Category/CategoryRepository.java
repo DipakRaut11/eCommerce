@@ -1,4 +1,4 @@
-package com.dipakraut.eCommerce.repository.CategoryRepository;
+package com.dipakraut.eCommerce.repository.Category;
 
 import com.dipakraut.eCommerce.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;

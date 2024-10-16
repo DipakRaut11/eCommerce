@@ -1,4 +1,4 @@
-package com.dipakraut.eCommerce.exception;
+package com.dipakraut.eCommerce.exception.Product;
 
 public class ProductNotFoundException extends RuntimeException{
     public ProductNotFoundException(String message) {

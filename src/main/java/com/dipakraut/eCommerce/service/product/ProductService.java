@@ -1,16 +1,15 @@
 package com.dipakraut.eCommerce.service.product;
 
-import com.dipakraut.eCommerce.exception.ProductNotFoundException;
+import com.dipakraut.eCommerce.exception.Product.ProductNotFoundException;
 import com.dipakraut.eCommerce.model.Category;
 import com.dipakraut.eCommerce.model.Product;
-import com.dipakraut.eCommerce.repository.CategoryRepository.CategoryRepository;
+import com.dipakraut.eCommerce.repository.Category.CategoryRepository;
 import com.dipakraut.eCommerce.repository.product.ProductRepository;
 import com.dipakraut.eCommerce.request.AddProductRequest;
 import com.dipakraut.eCommerce.request.ProductUpdateRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 

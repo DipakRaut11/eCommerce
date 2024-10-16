@@ -1,9 +1,9 @@
 package com.dipakraut.eCommerce.service.category;
 
-import com.dipakraut.eCommerce.exception.CategoryAlreadyExistsException;
-import com.dipakraut.eCommerce.exception.CategoryNotFoundException;
+import com.dipakraut.eCommerce.exception.Category.CategoryAlreadyExistsException;
+import com.dipakraut.eCommerce.exception.Category.CategoryNotFoundException;
 import com.dipakraut.eCommerce.model.Category;
-import com.dipakraut.eCommerce.repository.CategoryRepository.CategoryRepository;
+import com.dipakraut.eCommerce.repository.Category.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
