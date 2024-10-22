@@ -8,6 +8,7 @@ import com.dipakraut.eCommerce.repository.image.ImageRepository;
 import com.dipakraut.eCommerce.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ImageService implements IImageService{
 
 private final ImageRepository imageRepository;
@@ -56,7 +58,7 @@ private final IProductService productService;
                 image.setImage(new SerialBlob(file.getBytes()));
                 image.setProducts(product);
 
-                String buildDownloadUrl = "/api/v1/images/download/";
+                String buildDownloadUrl = "/api/v1/image/images/download/";
 
                 String downloadUrl = buildDownloadUrl + image.getId();
                 image.setDownloadUrl(downloadUrl);
