@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -26,6 +27,24 @@ public class Cart {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<CartItem> cartItems;
+    private Set<CartItem> items = new HashSet<>();
+
+    public void addItem(CartItem item) {
+        this.items.add(item);
+        item.setCart(this);
+        updateTotalAmount();
+    }
+    private void updateTotalAmount() {
+        this.totalAmount = items.stream().map( items ->{
+            BigDecimal unitPrice = items.getUnitPrice();
+            if (unitPrice == null) {
+                return BigDecimal.ZERO;
+            }
+            return unitPrice.multiply(BigDecimal.valueOf(items.getQuantity()));
+                }
+        )
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+    }
 
 }
