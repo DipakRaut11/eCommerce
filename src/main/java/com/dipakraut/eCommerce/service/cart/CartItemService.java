@@ -1,5 +1,6 @@
 package com.dipakraut.eCommerce.service.cart;
 
+import com.dipakraut.eCommerce.exception.cart.CartResourcesNotFoundException;
 import com.dipakraut.eCommerce.model.Cart;
 import com.dipakraut.eCommerce.model.CartItem;
 import com.dipakraut.eCommerce.model.Product;
@@ -8,6 +9,8 @@ import com.dipakraut.eCommerce.repository.cart.CartRepository;
 import com.dipakraut.eCommerce.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 
 @Service
@@ -57,11 +60,39 @@ public class CartItemService implements ICartItemService{
 
     @Override
     public void removeItemFromCart(Long cartId, Long productId) {
+        Cart cart = cartService.getCartById(cartId);
+        CartItem itemToRemove = getCartItem(cartId, productId);
+        cart.removeItem(itemToRemove);
+        cartRepository.save(cart);
 
     }
 
     @Override
     public void updateCartItemQuantity(Long cartId, Long productId, int quantity) {
+        Cart cart = cartService.getCartById(cartId);
+        cart.getItems()
+                .stream()
+                .filter(item -> item.getProduct().getId().equals(productId))
+                .findFirst()
+                .ifPresent(item -> {
+                            item.setQuantity(quantity);
+                            item.setUnitPrice(item.getProduct().getPrice());
+                            item.setTotalPrice();
+                        }
+                );
+
+        BigDecimal totalAmount = cart.getTotalAmount();
+        cart.setTotalAmount(totalAmount);
+        cartRepository.save(cart);
+    }
+
+    @Override
+    public CartItem getCartItem(Long cartId, Long productId) {
+        Cart cart = cartService.getCartById(cartId);
+        return cart.getItems()
+                .stream().
+                filter(item -> item.getProduct().getId().equals(productId))
+                .findFirst().orElseThrow(() -> new CartResourcesNotFoundException("Item not found"));
 
     }
 }
