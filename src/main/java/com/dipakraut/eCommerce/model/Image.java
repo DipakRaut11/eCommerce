@@ -1,5 +1,6 @@
 package com.dipakraut.eCommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,5 +30,6 @@ public class Image {
     @JoinColumn(
             name = "product_id"
     )
-    private Product products;
+    @JsonIgnore
+    private Product product;
 }

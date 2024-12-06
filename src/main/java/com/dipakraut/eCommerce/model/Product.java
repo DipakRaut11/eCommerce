@@ -1,5 +1,7 @@
 package com.dipakraut.eCommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,10 +33,11 @@ public class Product {
     private Category category;
 
     @OneToMany(
-            mappedBy = "products",
+            mappedBy = "product",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonIgnore
     private List<Image> images;
 
     public Product(String name, String brand, BigDecimal price, int inventory, String description, Category category) {

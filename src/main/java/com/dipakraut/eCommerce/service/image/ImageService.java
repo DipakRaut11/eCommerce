@@ -56,7 +56,7 @@ private final IProductService productService;
                 image.setFileName(file.getOriginalFilename());
                 image.setFileType(file.getContentType());
                 image.setImage(new SerialBlob(file.getBytes()));
-                image.setProducts(product);
+                image.setProduct(product);
 
                 String buildDownloadUrl = "/api/v1/image/images/download/";
 

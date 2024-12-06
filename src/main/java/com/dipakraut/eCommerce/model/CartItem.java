@@ -1,5 +1,6 @@
 package com.dipakraut.eCommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jdk.jfr.Enabled;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,8 @@ public class CartItem {
     @JoinColumn(name = "product_id")
     private Product product;
 
+
+    @JsonIgnore
     @ManyToOne(
             cascade = CascadeType.ALL
     )
