@@ -2,7 +2,7 @@ package com.dipakraut.eCommerce.service.product;
 
 import com.dipakraut.eCommerce.dto.image.ImageDto;
 import com.dipakraut.eCommerce.dto.product.ProductDto;
-import com.dipakraut.eCommerce.exception.Product.ProductNotFoundException;
+import com.dipakraut.eCommerce.exception.ResourceNotFoundException;
 import com.dipakraut.eCommerce.model.Category;
 import com.dipakraut.eCommerce.model.Image;
 import com.dipakraut.eCommerce.model.Product;
@@ -11,7 +11,6 @@ import com.dipakraut.eCommerce.repository.image.ImageRepository;
 import com.dipakraut.eCommerce.repository.product.ProductRepository;
 import com.dipakraut.eCommerce.request.AddProductRequest;
 import com.dipakraut.eCommerce.request.ProductUpdateRequest;
-
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -68,7 +67,7 @@ public class ProductService implements IProductService{
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(()-> new ProductNotFoundException("Product not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Product not found"));
     }
 
     @Override
@@ -78,7 +77,7 @@ public class ProductService implements IProductService{
 
                 //Lamda expression
                .ifPresentOrElse(product -> productRepository.delete(product),
-                       () -> {throw new ProductNotFoundException("Product not found!");
+                       () -> {throw new ResourceNotFoundException("Product not found!");
                             }
                        );
 
@@ -93,7 +92,7 @@ public class ProductService implements IProductService{
         return productRepository.findById(productId)
                 .map(existingProduct -> updateExistingProduct(existingProduct, request))
                 .map(productRepository::save)
-                .orElseThrow(()-> new ProductNotFoundException("Product not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Product not found"));
 
 
     }
