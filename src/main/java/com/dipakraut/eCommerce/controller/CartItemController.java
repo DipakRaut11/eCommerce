@@ -1,6 +1,6 @@
 package com.dipakraut.eCommerce.controller;
 
-import com.dipakraut.eCommerce.exception.cart.CartResourcesNotFoundException;
+import com.dipakraut.eCommerce.exception.ResourceNotFoundException;
 import com.dipakraut.eCommerce.response.ApiResponse;
 import com.dipakraut.eCommerce.service.cart.ICartItemService;
 import com.dipakraut.eCommerce.service.cart.ICartService;
@@ -31,7 +31,7 @@ public class CartItemController {
 
             cartItemService.addItemToCart(cartId, productId, quantity);
             return ResponseEntity.ok(new ApiResponse("Item added to cart successfully", null));
-        } catch (CartResourcesNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
           return ResponseEntity.status(NOT_FOUND)
                   .body(new ApiResponse(e.getMessage(), null));
         }
@@ -42,7 +42,7 @@ public class CartItemController {
         try {
             cartItemService.removeItemFromCart(cartId, itemId);
             return ResponseEntity.ok(new ApiResponse("Item removed from cart successfully", null));
-        } catch (CartResourcesNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND)
                     .body(new ApiResponse(e.getMessage(), null));
         }
@@ -54,7 +54,7 @@ public class CartItemController {
         try {
             cartItemService.updateCartItemQuantity(cartId, itemId, quantity);
             return ResponseEntity.ok(new ApiResponse("Item quantity updated successfully", null));
-        } catch (CartResourcesNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND)
                     .body(new ApiResponse(e.getMessage(), null));
         }
