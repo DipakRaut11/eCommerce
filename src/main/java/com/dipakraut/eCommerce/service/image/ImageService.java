@@ -1,7 +1,7 @@
 package com.dipakraut.eCommerce.service.image;
 
 import com.dipakraut.eCommerce.dto.image.ImageDto;
-import com.dipakraut.eCommerce.exception.Image.ImageNotFoundException;
+import com.dipakraut.eCommerce.exception.ResourceNotFoundException;
 import com.dipakraut.eCommerce.model.Image;
 import com.dipakraut.eCommerce.model.Product;
 import com.dipakraut.eCommerce.repository.image.ImageRepository;
@@ -28,7 +28,7 @@ private final IProductService productService;
     @Override
     public Image getImageById(Long id) {
         return imageRepository.findById(id).
-        orElseThrow(()-> new ImageNotFoundException("Image not found "+id));
+        orElseThrow(()-> new ResourceNotFoundException("Image not found "+id));
     }
 
     @Override
@@ -36,7 +36,7 @@ private final IProductService productService;
        imageRepository.findById(id)
                .ifPresentOrElse(imageRepository::delete,
                ()-> {
-                   throw new ImageNotFoundException("Image not found");
+                   throw new ResourceNotFoundException("Image not found");
                }
                );
 
