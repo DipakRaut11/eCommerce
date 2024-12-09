@@ -1,7 +1,7 @@
-package com.dipakraut.eCommerce.exception.Category;
+package com.dipakraut.eCommerce.exception;
 
-public class CategoryAlreadyExistsException extends RuntimeException {
-    public CategoryAlreadyExistsException(String message) {
+public class ResourceAlreadyExistsException extends RuntimeException {
+    public ResourceAlreadyExistsException(String message) {
         super(message);
     }
 }
