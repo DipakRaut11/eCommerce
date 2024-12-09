@@ -1,12 +1,11 @@
 package com.dipakraut.eCommerce.controller;
 
-import com.dipakraut.eCommerce.exception.Category.CategoryAlreadyExistsException;
-import com.dipakraut.eCommerce.exception.Category.CategoryNotFoundException;
+import com.dipakraut.eCommerce.exception.ResourceAlreadyExistsException;
+import com.dipakraut.eCommerce.exception.ResourceNotFoundException;
 import com.dipakraut.eCommerce.model.Category;
 import com.dipakraut.eCommerce.response.ApiResponse;
 import com.dipakraut.eCommerce.service.category.ICategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +37,7 @@ public class CategoryController {
         try {
             Category theCategory = categoryService.addCategory(name);
             return ResponseEntity.ok(new ApiResponse("Category added", theCategory));
-        } catch (CategoryAlreadyExistsException e) {
+        } catch (ResourceAlreadyExistsException e) {
             return ResponseEntity.status(CONFLICT)
                     .body(new ApiResponse(e.getMessage(), null));
         }
@@ -50,7 +49,7 @@ public class CategoryController {
             Category theCategory = categoryService.getCategoryById(id);
             return ResponseEntity.ok(new ApiResponse("Found", theCategory));
         }
-        catch (CategoryNotFoundException e) {
+        catch (ResourceNotFoundException e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse(e.getMessage(), null));
         }
@@ -61,7 +60,7 @@ public class CategoryController {
             Category theCategory = categoryService.getCategoriesByName(name);
             return ResponseEntity.ok(new ApiResponse("Found", theCategory));
         }
-        catch (CategoryNotFoundException e) {
+        catch (ResourceNotFoundException e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse(e.getMessage(), null));
         }
@@ -72,7 +71,7 @@ public class CategoryController {
            categoryService.deleteCategory(id);
             return ResponseEntity.ok(new ApiResponse("Found", null));
         }
-        catch (CategoryNotFoundException e) {
+        catch (ResourceNotFoundException e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse(e.getMessage(), null));
         }
@@ -85,7 +84,7 @@ public class CategoryController {
             Category updateCategory = categoryService.updateCategory(category, categoryId);
             return ResponseEntity.ok(new ApiResponse("update success!", updateCategory));
         }
-        catch (CategoryNotFoundException e) {
+        catch (ResourceNotFoundException e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse(e.getMessage(), null));
         }
