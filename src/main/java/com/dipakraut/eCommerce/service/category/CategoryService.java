@@ -1,7 +1,7 @@
 package com.dipakraut.eCommerce.service.category;
 
-import com.dipakraut.eCommerce.exception.Category.CategoryAlreadyExistsException;
-import com.dipakraut.eCommerce.exception.Category.CategoryNotFoundException;
+import com.dipakraut.eCommerce.exception.ResourceAlreadyExistsException;
+import com.dipakraut.eCommerce.exception.ResourceNotFoundException;
 import com.dipakraut.eCommerce.model.Category;
 import com.dipakraut.eCommerce.repository.Category.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class CategoryService implements ICategoryService{
         categoryRepository.findById(id)
                 .ifPresentOrElse(category -> categoryRepository.delete(category),
                         () ->{
-                            throw new CategoryNotFoundException("Category not found");
+                            throw new ResourceNotFoundException("Category not found");
                         }
                 );
 
@@ -38,7 +38,7 @@ public class CategoryService implements ICategoryService{
         return Optional.of(category)
                 .filter(c -> !categoryRepository.existsByName(c.getName()))
         .map(categoryRepository::save)
-                .orElseThrow(()-> new CategoryAlreadyExistsException(category.getName()+" Category already exists"));
+                .orElseThrow(()-> new ResourceAlreadyExistsException(category.getName()+" Category already exists"));
     }
 
     @Override
@@ -48,7 +48,7 @@ public class CategoryService implements ICategoryService{
                     oldCategory.setName(category.getName());
                     return categoryRepository.save(oldCategory);
                 })
-                .orElseThrow(()-> new CategoryNotFoundException("Category not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Category not found"));
     }
 
 
