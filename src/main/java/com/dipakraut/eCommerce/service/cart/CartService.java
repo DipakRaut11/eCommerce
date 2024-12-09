@@ -1,6 +1,6 @@
 package com.dipakraut.eCommerce.service.cart;
 
-import com.dipakraut.eCommerce.exception.cart.CartResourcesNotFoundException;
+import com.dipakraut.eCommerce.exception.ResourceNotFoundException;
 import com.dipakraut.eCommerce.model.Cart;
 import com.dipakraut.eCommerce.repository.cart.CartItemRepository;
 import com.dipakraut.eCommerce.repository.cart.CartRepository;
@@ -22,7 +22,7 @@ public class CartService implements ICartService{
     @Override
     public Cart getCartById(Long id) {
         Cart cart =  cartRepository.findById(id)
-                .orElseThrow(() -> new CartResourcesNotFoundException("Cart not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
         BigDecimal totalAmount = cart.getTotalAmount();
         cart.setTotalAmount(totalAmount);
         return cartRepository.save(cart);
