@@ -1,13 +1,11 @@
 package com.dipakraut.eCommerce.controller;
 
 import com.dipakraut.eCommerce.dto.image.ImageDto;
-import com.dipakraut.eCommerce.exception.Image.ImageNotFoundException;
+import com.dipakraut.eCommerce.exception.ResourceNotFoundException;
 import com.dipakraut.eCommerce.model.Image;
 import com.dipakraut.eCommerce.response.ApiResponse;
 import com.dipakraut.eCommerce.service.image.IImageService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.dialect.LobMergeStrategy;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -15,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.SQLException;
@@ -63,7 +60,7 @@ public class ImageController {
                 iImageService.updateImage(file, imageId);
                 return ResponseEntity.ok(new ApiResponse("Image updated successfully", null));
             }
-        } catch (ImageNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse( e.getMessage(), null));
         }
@@ -81,7 +78,7 @@ public class ImageController {
                 iImageService.deleteImageById(imageId);
                 return ResponseEntity.ok(new ApiResponse("Image delete successfully", null));
             }
-        } catch (ImageNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse( e.getMessage(), null));
         }
