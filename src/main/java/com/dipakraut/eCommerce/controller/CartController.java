@@ -1,16 +1,14 @@
 package com.dipakraut.eCommerce.controller;
 
-import com.dipakraut.eCommerce.exception.cart.CartResourcesNotFoundException;
+import com.dipakraut.eCommerce.exception.ResourceNotFoundException;
 import com.dipakraut.eCommerce.model.Cart;
 import com.dipakraut.eCommerce.response.ApiResponse;
-import com.dipakraut.eCommerce.service.cart.CartService;
 import com.dipakraut.eCommerce.service.cart.ICartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -26,7 +24,7 @@ public class CartController {
         try {
             Cart cart = cartService.getCartById(cartId);
             return ResponseEntity.ok(new ApiResponse("Success", cart));
-        } catch (CartResourcesNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND)
                     .body(new ApiResponse(e.getMessage(), null));
         }
@@ -37,7 +35,7 @@ public class CartController {
         try {
             cartService.clearCart(cartId);
             return ResponseEntity.ok(new ApiResponse("Clear cart Success", null));
-        } catch (CartResourcesNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND)
                     .body(new ApiResponse(e.getMessage(), null));
         }
@@ -49,7 +47,7 @@ public class CartController {
         try {
             BigDecimal totalPrice = cartService.getCartTotalPrice(cartId);
             return ResponseEntity.ok(new ApiResponse("Total Price", totalPrice));
-        } catch (CartResourcesNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND)
                     .body(new ApiResponse(e.getMessage(), null));
         }
