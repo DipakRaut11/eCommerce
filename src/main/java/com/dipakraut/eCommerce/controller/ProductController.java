@@ -1,8 +1,8 @@
 package com.dipakraut.eCommerce.controller;
 
 import com.dipakraut.eCommerce.dto.product.ProductDto;
-import com.dipakraut.eCommerce.exception.Product.ProductAlreadyExistException;
-import com.dipakraut.eCommerce.exception.Product.ProductNotFoundException;
+import com.dipakraut.eCommerce.exception.ResourceAlreadyExistsException;
+import com.dipakraut.eCommerce.exception.ResourceNotFoundException;
 import com.dipakraut.eCommerce.model.Product;
 import com.dipakraut.eCommerce.request.AddProductRequest;
 import com.dipakraut.eCommerce.request.ProductUpdateRequest;
@@ -11,10 +11,8 @@ import com.dipakraut.eCommerce.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -43,7 +41,7 @@ public class ProductController {
             Product product = productService.getProductById(id);
             ProductDto productDto = productService.convertToDto(product);
             return ResponseEntity.ok(new ApiResponse(" Product found by id", productDto));
-        } catch (ProductNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND)
                     .body(new ApiResponse(e.getMessage(), null));
         }
@@ -56,7 +54,7 @@ public class ProductController {
         try {
             Product theProduct = productService.addProduct(request);
             return ResponseEntity.ok(new ApiResponse("Product Added Successfully", theProduct));
-        } catch (ProductAlreadyExistException e) {
+        } catch (ResourceAlreadyExistsException e) {
             return ResponseEntity.status(CONFLICT)
                     .body(new ApiResponse("Product Already Exist", null));
         }
@@ -68,7 +66,7 @@ public class ProductController {
         try {
             Product updateProduct = productService.updateProduct(request, productId);
             return ResponseEntity.ok(new ApiResponse("Product Updated Successfully", updateProduct));
-        } catch (ProductNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND)
                     .body(new ApiResponse(e.getMessage(), null));
         }
@@ -80,7 +78,7 @@ public class ProductController {
         try {
             productService.deleteProduct(productId);
             return ResponseEntity.ok(new ApiResponse("Product Deleted Successfully", null));
-        } catch (ProductNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND)
                     .body(new ApiResponse(e.getMessage(), null));
         }
