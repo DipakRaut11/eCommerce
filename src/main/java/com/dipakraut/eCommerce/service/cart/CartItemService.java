@@ -1,6 +1,6 @@
 package com.dipakraut.eCommerce.service.cart;
 
-import com.dipakraut.eCommerce.exception.cart.CartResourcesNotFoundException;
+import com.dipakraut.eCommerce.exception.ResourceNotFoundException;
 import com.dipakraut.eCommerce.model.Cart;
 import com.dipakraut.eCommerce.model.CartItem;
 import com.dipakraut.eCommerce.model.Product;
@@ -94,7 +94,7 @@ public class CartItemService implements ICartItemService{
         return cart.getItems()
                 .stream().
                 filter(item -> item.getProduct().getId().equals(productId))
-                .findFirst().orElseThrow(() -> new CartResourcesNotFoundException("Item not found"));
+                .findFirst().orElseThrow(() -> new ResourceNotFoundException("Item not found"));
 
     }
 }
