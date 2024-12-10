@@ -2,8 +2,8 @@ package com.dipakraut.eCommerce.service.product;
 
 import com.dipakraut.eCommerce.dto.product.ProductDto;
 import com.dipakraut.eCommerce.model.Product;
-import com.dipakraut.eCommerce.request.AddProductRequest;
-import com.dipakraut.eCommerce.request.ProductUpdateRequest;
+import com.dipakraut.eCommerce.request.product.AddProductRequest;
+import com.dipakraut.eCommerce.request.product.ProductUpdateRequest;
 
 import java.util.List;
 
