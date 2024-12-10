@@ -1,4 +1,4 @@
-package com.dipakraut.eCommerce.request;
+package com.dipakraut.eCommerce.request.product;
 
 import com.dipakraut.eCommerce.model.Category;
 import lombok.Data;
