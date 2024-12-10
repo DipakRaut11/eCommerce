@@ -29,6 +29,11 @@ public class Cart {
     )
     private Set<CartItem> items = new HashSet<>();
 
+    @OneToOne
+    @JoinColumn(name = "user_id"
+            )
+    private User user;
+
     public void addItem(CartItem item) {
         this.items.add(item);
         item.setCart(this);
@@ -53,5 +58,7 @@ public class Cart {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
     }
+
+
 
 }
