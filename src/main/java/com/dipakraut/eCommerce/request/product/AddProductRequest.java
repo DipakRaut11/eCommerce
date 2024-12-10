@@ -1,9 +1,6 @@
-package com.dipakraut.eCommerce.request;
+package com.dipakraut.eCommerce.request.product;
 
 import com.dipakraut.eCommerce.model.Category;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
 import java.math.BigDecimal;
