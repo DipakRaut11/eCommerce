@@ -1,5 +1,6 @@
 package com.dipakraut.eCommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public class Cart {
     )
     private Set<CartItem> items = new HashSet<>();
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_id"
             )
