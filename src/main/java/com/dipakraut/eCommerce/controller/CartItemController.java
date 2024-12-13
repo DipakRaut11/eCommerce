@@ -1,9 +1,12 @@
 package com.dipakraut.eCommerce.controller;
 
 import com.dipakraut.eCommerce.exception.ResourceNotFoundException;
+import com.dipakraut.eCommerce.model.Cart;
+import com.dipakraut.eCommerce.model.User;
 import com.dipakraut.eCommerce.response.ApiResponse;
 import com.dipakraut.eCommerce.service.cart.ICartItemService;
 import com.dipakraut.eCommerce.service.cart.ICartService;
+import com.dipakraut.eCommerce.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,19 +20,22 @@ public class CartItemController {
 
     private final ICartItemService cartItemService;
     private final ICartService cartService;
+    private final UserService userService;
 
     @PostMapping("/item/add")
-    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam(required = false) Long cartId,
+    public ResponseEntity<ApiResponse> addItemToCart(// @RequestParam(required = false) Long cartId,
                                                      @RequestParam Long productId,
                                                      @RequestParam Integer quantity) {
         try {
 
-            if (cartId == null){
-               cartId =  cartService.initializeNewCart();
+//            if (cartId == null){
+//               cartId =  cartService.initializeNewCart();
+//
+//            }
+            User user = userService.getUserById(1L);
+            Cart cart = cartService.initializeNewCart(user);
 
-            }
-
-            cartItemService.addItemToCart(cartId, productId, quantity);
+            cartItemService.addItemToCart(cart.getId(), productId, quantity);
             return ResponseEntity.ok(new ApiResponse("Item added to cart successfully", null));
         } catch (ResourceNotFoundException e) {
           return ResponseEntity.status(NOT_FOUND)
