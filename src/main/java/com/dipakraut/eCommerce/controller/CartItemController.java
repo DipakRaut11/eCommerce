@@ -32,7 +32,7 @@ public class CartItemController {
 //               cartId =  cartService.initializeNewCart();
 //
 //            }
-            User user = userService.getUserById(1L);
+            User user = userService.getUserById(4L);
             Cart cart = cartService.initializeNewCart(user);
 
             cartItemService.addItemToCart(cart.getId(), productId, quantity);
