@@ -1,18 +1,27 @@
 package com.dipakraut.eCommerce.service.user;
 
+import com.dipakraut.eCommerce.dto.order.OrderDto;
+import com.dipakraut.eCommerce.dto.user.UserDto;
 import com.dipakraut.eCommerce.exception.ResourceNotFoundException;
 import com.dipakraut.eCommerce.model.User;
+import com.dipakraut.eCommerce.repository.order.OrderRepository;
 import com.dipakraut.eCommerce.repository.user.UserRepository;
 import com.dipakraut.eCommerce.request.user.CreateUserRequest;
 import com.dipakraut.eCommerce.request.user.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService{
 
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
+    private final OrderRepository orderRepository;
 
     @Override
     public User getUserById(long userId) {
@@ -22,7 +31,18 @@ public class UserService implements IUserService{
 
     @Override
     public User createUser(CreateUserRequest request) {
-        return null;
+        return Optional.of(request)
+                .filter(user -> !userRepository
+                        .existsByEmail(request.getEmail()))
+                .map(req -> {
+                    User user = new User();
+                    user.setEmail(request.getEmail());
+                    user.setPassword(request.getPassword());
+                    user.setFirstName(request.getFirstName());
+                    user.setLastName(request.getLastName());
+                    return userRepository.save(user);
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("User already exists with email: " + request.getEmail()));
     }
 
     @Override
@@ -41,5 +61,21 @@ public class UserService implements IUserService{
                 .ifPresentOrElse(userRepository :: delete, () ->{
                     throw new ResourceNotFoundException("User not found with id: " + userId);
                 });
+    }
+
+    @Override
+    public UserDto convertUserToDto(User user) {
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+
+        // Fetch orders associated with the user
+        List<OrderDto> orderDtos = orderRepository.findByUserId(user.getId())
+                .stream()
+                .map(order -> modelMapper.map(order, OrderDto.class)) // Map each Order to OrderDto
+                .toList();
+
+        // Set orders in UserDto
+        userDto.setOrders(orderDtos);
+
+        return userDto;
     }
 }
