@@ -1,15 +1,17 @@
 package com.dipakraut.eCommerce.service.order;
 
+import com.dipakraut.eCommerce.dto.order.OrderDto;
 import com.dipakraut.eCommerce.enums.OderStatus;
 import com.dipakraut.eCommerce.exception.ResourceNotFoundException;
 import com.dipakraut.eCommerce.model.Cart;
 import com.dipakraut.eCommerce.model.Order;
 import com.dipakraut.eCommerce.model.OrderItem;
 import com.dipakraut.eCommerce.model.Product;
-import com.dipakraut.eCommerce.repository.order.OrderRpository;
+import com.dipakraut.eCommerce.repository.order.OrderRepository;
 import com.dipakraut.eCommerce.repository.product.ProductRepository;
 import com.dipakraut.eCommerce.service.cart.CartService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,9 +23,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderService implements IOrderService {
 
-    private final OrderRpository orderRpository;
+    private final OrderRepository orderRpository;
     private final ProductRepository productRepository;
     private final CartService cartService;
+    private final ModelMapper modelMapper;
 
 
     @Override
@@ -62,6 +65,8 @@ public class OrderService implements IOrderService {
                             product,
                             cartItem.getQuantity(),
                             cartItem.getUnitPrice()
+
+
                     );
                 }).toList();
     }
@@ -75,13 +80,22 @@ public class OrderService implements IOrderService {
 
 
     @Override
-    public Order getOrderById(Long orderId) {
+    public OrderDto getOrderById(Long orderId) {
         return orderRpository.findById(orderId)
-                .orElseThrow(()->new ResourceNotFoundException("Order not found"));
+                .map(this :: convertToDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
     }
 
     @Override
-    public List<Order> getUserOrder(Long userId) {
-        return orderRpository.findByUserId(userId);
+    public List<OrderDto> getUserOrders(Long userId) {
+        List<Order> orders = orderRpository.findByUserId(userId);
+        return orders.stream()
+                .map(this :: convertToDto)
+                .toList();
+    }
+
+    @Override
+    public OrderDto convertToDto(Order order){
+        return modelMapper.map(order, OrderDto.class);
     }
 }
