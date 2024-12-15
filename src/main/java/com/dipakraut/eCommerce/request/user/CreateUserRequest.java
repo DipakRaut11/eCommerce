@@ -8,7 +8,6 @@ public class CreateUserRequest {
 
     private String firstName;
     private String lastName;
-    @NaturalId
     private String email;
     private String password;
 }
