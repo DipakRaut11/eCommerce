@@ -1,6 +1,7 @@
 package com.dipakraut.eCommerce.service.cart;
 
 import com.dipakraut.eCommerce.model.Cart;
+import com.dipakraut.eCommerce.model.User;
 
 import java.math.BigDecimal;
 
@@ -9,7 +10,7 @@ public interface ICartService {
     void clearCart(Long id);
     BigDecimal getCartTotalPrice(Long id);
 
-    Long initializeNewCart();
+    Cart initializeNewCart(User user);
 
     Cart getCartByUserId(Long userId);
 }
