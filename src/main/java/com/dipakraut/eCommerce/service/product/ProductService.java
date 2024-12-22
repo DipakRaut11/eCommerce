@@ -2,6 +2,7 @@ package com.dipakraut.eCommerce.service.product;
 
 import com.dipakraut.eCommerce.dto.image.ImageDto;
 import com.dipakraut.eCommerce.dto.product.ProductDto;
+import com.dipakraut.eCommerce.exception.ResourceAlreadyExistsException;
 import com.dipakraut.eCommerce.exception.ResourceNotFoundException;
 import com.dipakraut.eCommerce.model.Category;
 import com.dipakraut.eCommerce.model.Image;
@@ -38,6 +39,9 @@ public class ProductService implements IProductService{
         //then set is as the new product category
 
 
+        if(productExists(request.getName(), request.getBrand())){
+            throw new ResourceAlreadyExistsException(request.getBrand()+" "+request.getName()+" already exists, you may update product");
+        }
         Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
                 .orElseGet(() -> {
                             Category newCategory = new Category(request.getCategory().getName());
@@ -49,6 +53,10 @@ public class ProductService implements IProductService{
         request.setCategory(category);
         return productRepository.save(createProduct(request, category));
 
+    }
+
+    private boolean productExists(String name, String brand) {
+        return productRepository.existsByNameAndBrand(name, brand);
     }
 
     private Product createProduct(AddProductRequest request, Category category){
