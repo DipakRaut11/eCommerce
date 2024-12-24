@@ -10,6 +10,9 @@ import com.dipakraut.eCommerce.request.user.CreateUserRequest;
 import com.dipakraut.eCommerce.request.user.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +20,12 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements IUserService{
+public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final OrderRepository orderRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User getUserById(long userId) {
@@ -37,7 +41,7 @@ public class UserService implements IUserService{
                 .map(req -> {
                     User user = new User();
                     user.setEmail(request.getEmail());
-                    user.setPassword(request.getPassword());
+                    user.setPassword(passwordEncoder.encode(request.getPassword()));
                     user.setFirstName(request.getFirstName());
                     user.setLastName(request.getLastName());
                     return userRepository.save(user);
@@ -48,7 +52,7 @@ public class UserService implements IUserService{
     @Override
     public User updateUser(UpdateUserRequest request, long userId) {
         return userRepository.findById(userId)
-                .map(existingUser ->{
+                .map(existingUser -> {
                     existingUser.setFirstName(request.getFirstName());
                     existingUser.setLastName(request.getLastName());
                     return userRepository.save(existingUser);
@@ -58,13 +62,14 @@ public class UserService implements IUserService{
     @Override
     public void deleteUser(long userId) {
         userRepository.findById(userId)
-                .ifPresentOrElse(userRepository :: delete, () ->{
+                .ifPresentOrElse(userRepository::delete, () -> {
                     throw new ResourceNotFoundException("User not found with id: " + userId);
                 });
     }
 
     @Override
     public UserDto convertUserToDto(User user) {
+        /*
         UserDto userDto = modelMapper.map(user, UserDto.class);
 
         // Fetch orders associated with the user
@@ -77,5 +82,17 @@ public class UserService implements IUserService{
         userDto.setOrders(orderDtos);
 
         return userDto;
+
+         */
+        return modelMapper.map(user, UserDto.class);
+    }
+
+    @Override
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return userRepository.findByEmail(email);
     }
 }
+
+
