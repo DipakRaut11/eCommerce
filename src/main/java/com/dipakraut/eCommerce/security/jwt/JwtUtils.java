@@ -22,7 +22,7 @@ public class JwtUtils {
     private String jwtSecret;
 
     @Value("${auth.token.expirationInMils}")
-    private int expirationTime;
+    private long expirationTime;
 
     public String generateTokenForUser(Authentication authentication){
         ShopUserDetails userPrincipal = (ShopUserDetails) authentication.getPrincipal();
